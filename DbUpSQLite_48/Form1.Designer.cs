@@ -33,6 +33,7 @@
             this.textBoxDatabasePath = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.openFileDialogDatabase = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // buttonOk
@@ -85,6 +86,12 @@
             this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button3.UseVisualStyleBackColor = true;
             // 
+            // openFileDialogDatabase
+            // 
+            this.openFileDialogDatabase.CheckFileExists = false;
+            this.openFileDialogDatabase.FileName = "Select or create database";
+            this.openFileDialogDatabase.Filter = "Database file|*.db|SQLite files|*.sqlite|SQLite 3 files|*.sqlite3";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -111,6 +118,7 @@
         private System.Windows.Forms.TextBox textBoxDatabasePath;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.OpenFileDialog openFileDialogDatabase;
     }
 }
 
