@@ -9,11 +9,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DbUp;
 using System.Data.SQLite;
+using System.Runtime.InteropServices;
+using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DbUpSQLite_48
 {
     public partial class FormMain : Form
     {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+        [DllImport("kernel32.dll")]
+        private static extern bool FreeConsole();
         string _migrationsPath { get; set; }
         string _databasePath { get; set; }
         public string MigrationsPath { get 
@@ -21,7 +29,7 @@ namespace DbUpSQLite_48
                 return _migrationsPath;
             } 
             set {
-                textBox2.Text = value;
+                textBoxMigrationsPath.Text = value;
                 _migrationsPath = value;
                 if (!System.IO.Directory.Exists(_migrationsPath))
                 {
@@ -44,8 +52,10 @@ namespace DbUpSQLite_48
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonExecuteMigrations_Click(object sender, EventArgs e)
         {
+            AllocConsole();
+            Console.SetOut(new ControlWriter(textBoxConsoleLog));
             try
             {
                 var connectionString = $@"Data Source={DatabasePath};";
@@ -56,8 +66,9 @@ namespace DbUpSQLite_48
                     .LogToConsole()
                     .Build();
                 var result = upgrader.PerformUpgrade();
+                this.Size = new Size(this.Width, 421);
                 if (!result.Successful)
-                {
+                {                     
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(result.Error);
                     Console.ResetColor();
@@ -73,6 +84,7 @@ namespace DbUpSQLite_48
                 Console.ReadLine();
                 throw;
             }
+            FreeConsole();
         }
 
         private void buttonAddDatabase_Click(object sender, EventArgs e)
@@ -102,15 +114,24 @@ namespace DbUpSQLite_48
                     throw;
                 }
                 DatabasePath = openFileDialogDatabase.FileName;
+                //set database dir path to migrations path
+                if (DatabasePath == null)
+                {
+                    throw new Exception("Database path is null");
+                }
+                else
+                {
+                    folderBrowserDialogMigrations.SelectedPath = System.IO.Path.GetDirectoryName(DatabasePath);
+                }
+                
             }
         }
 
 
 
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonSetMigrationsFolder_Click(object sender, EventArgs e)
         {
             folderBrowserDialogMigrations.ShowDialog();
-
             try
             {
                 //verify if folder exists
@@ -130,5 +151,26 @@ namespace DbUpSQLite_48
                 throw;
             }
         }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+    class ControlWriter : TextWriter
+    {
+        private readonly Control control;
+
+        public ControlWriter(Control control)
+        {
+            this.control = control;
+        }
+
+        public override void Write(char value)
+        {
+            control.Invoke(new Action(() => control.Text += value));
+        }
+
+        public override Encoding Encoding => Encoding.ASCII;
     }
 }

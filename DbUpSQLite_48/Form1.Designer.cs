@@ -31,10 +31,11 @@
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonAddDatabase = new System.Windows.Forms.Button();
             this.textBoxDatabasePath = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.textBoxMigrationsPath = new System.Windows.Forms.TextBox();
+            this.buttonSetMigrationsFolder = new System.Windows.Forms.Button();
             this.openFileDialogDatabase = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialogMigrations = new System.Windows.Forms.FolderBrowserDialog();
+            this.textBoxConsoleLog = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonOk
@@ -46,7 +47,7 @@
             this.buttonOk.TabIndex = 0;
             this.buttonOk.Text = "Execute Migration";
             this.buttonOk.UseVisualStyleBackColor = true;
-            this.buttonOk.Click += new System.EventHandler(this.button1_Click);
+            this.buttonOk.Click += new System.EventHandler(this.buttonExecuteMigrations_Click);
             // 
             // buttonAddDatabase
             // 
@@ -68,44 +69,56 @@
             this.textBoxDatabasePath.Size = new System.Drawing.Size(499, 24);
             this.textBoxDatabasePath.TabIndex = 2;
             // 
-            // textBox2
+            // textBoxMigrationsPath
             // 
-            this.textBox2.Location = new System.Drawing.Point(195, 59);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(499, 24);
-            this.textBox2.TabIndex = 4;
+            this.textBoxMigrationsPath.Location = new System.Drawing.Point(195, 59);
+            this.textBoxMigrationsPath.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxMigrationsPath.Name = "textBoxMigrationsPath";
+            this.textBoxMigrationsPath.Size = new System.Drawing.Size(499, 24);
+            this.textBoxMigrationsPath.TabIndex = 4;
             // 
-            // button3
+            // buttonSetMigrationsFolder
             // 
-            this.button3.Location = new System.Drawing.Point(18, 57);
-            this.button3.Margin = new System.Windows.Forms.Padding(4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(168, 32);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Migrations folder ->";
-            this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.buttonSetMigrationsFolder.Location = new System.Drawing.Point(18, 57);
+            this.buttonSetMigrationsFolder.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSetMigrationsFolder.Name = "buttonSetMigrationsFolder";
+            this.buttonSetMigrationsFolder.Size = new System.Drawing.Size(168, 32);
+            this.buttonSetMigrationsFolder.TabIndex = 3;
+            this.buttonSetMigrationsFolder.Text = "Migrations folder ->";
+            this.buttonSetMigrationsFolder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonSetMigrationsFolder.UseVisualStyleBackColor = true;
+            this.buttonSetMigrationsFolder.Click += new System.EventHandler(this.buttonSetMigrationsFolder_Click);
             // 
             // openFileDialogDatabase
             // 
             this.openFileDialogDatabase.CheckFileExists = false;
-            this.openFileDialogDatabase.FileName = "Select or create database";
+            this.openFileDialogDatabase.DefaultExt = "db";
             this.openFileDialogDatabase.Filter = "Database file|*.db|SQLite files|*.sqlite|SQLite 3 files|*.sqlite3";
+            this.openFileDialogDatabase.Title = "Select or create database";
             this.openFileDialogDatabase.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialogDatabase_FileOk);
             // 
             // folderBrowserDialogMigrations
             // 
+            this.folderBrowserDialogMigrations.Description = "Define migrations path";
             this.folderBrowserDialogMigrations.ShowNewFolderButton = false;
+            // 
+            // textBoxConsoleLog
+            // 
+            this.textBoxConsoleLog.Location = new System.Drawing.Point(18, 161);
+            this.textBoxConsoleLog.Multiline = true;
+            this.textBoxConsoleLog.Name = "textBoxConsoleLog";
+            this.textBoxConsoleLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxConsoleLog.Size = new System.Drawing.Size(673, 209);
+            this.textBoxConsoleLog.TabIndex = 5;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(703, 141);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.button3);
+            this.ClientSize = new System.Drawing.Size(703, 136);
+            this.Controls.Add(this.textBoxConsoleLog);
+            this.Controls.Add(this.textBoxMigrationsPath);
+            this.Controls.Add(this.buttonSetMigrationsFolder);
             this.Controls.Add(this.textBoxDatabasePath);
             this.Controls.Add(this.buttonAddDatabase);
             this.Controls.Add(this.buttonOk);
@@ -113,6 +126,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
             this.Text = "DbUpSQLite";
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,10 +137,11 @@
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.Button buttonAddDatabase;
         private System.Windows.Forms.TextBox textBoxDatabasePath;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBoxMigrationsPath;
+        private System.Windows.Forms.Button buttonSetMigrationsFolder;
         private System.Windows.Forms.OpenFileDialog openFileDialogDatabase;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialogMigrations;
+        private System.Windows.Forms.TextBox textBoxConsoleLog;
     }
 }
 
