@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DbUp;
+using System.Data.SQLite;
 
 namespace DbUpSQLite_48
 {
@@ -41,8 +42,6 @@ namespace DbUpSQLite_48
         public FormMain()
         {
             InitializeComponent();
-            MigrationsPath = $@"D:\repos\HSA_Estoque48\HSA_Estoque48\bin\Release\Migrations";
-            DatabasePath = $@"D:\repos\HSA_Estoque48\HSA_Estoque48\bin\Release\inventory.db";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -78,7 +77,58 @@ namespace DbUpSQLite_48
 
         private void buttonAddDatabase_Click(object sender, EventArgs e)
         {
+            openFileDialogDatabase.ShowDialog();            
+        }
 
+        private void openFileDialogDatabase_FileOk(object sender, CancelEventArgs e)
+        {
+            //verify if openfiledialog is ok and databse exists, if true set database path
+            if (openFileDialogDatabase.CheckFileExists)
+            {
+                DatabasePath = openFileDialogDatabase.FileName;
+            }
+            else
+            {
+                try
+                {
+                    SQLiteConnection sQLiteConnection = new SQLiteConnection($@"Data Source={openFileDialogDatabase.FileName}");
+                    sQLiteConnection.Open();
+                    sQLiteConnection.Close();
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.ReadLine();
+                    throw;
+                }
+                DatabasePath = openFileDialogDatabase.FileName;
+            }
+        }
+
+
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialogMigrations.ShowDialog();
+
+            try
+            {
+                //verify if folder exists
+                if (System.IO.Directory.Exists(folderBrowserDialogMigrations.SelectedPath))
+                {
+                    MigrationsPath = folderBrowserDialogMigrations.SelectedPath;
+                }
+                else
+                {
+                    throw new Exception("Folder of scripts doesn't exists");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadLine();
+                throw;
+            }
         }
     }
 }
