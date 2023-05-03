@@ -72,7 +72,7 @@ namespace DbUpSQLite_48
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(result.Error);
                     Console.ResetColor();
-                    throw new Exception("Folder of scripts doesn't exists");
+                    //throw new Exception("Folder of scripts doesn't exists");
                 }
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Success!");
